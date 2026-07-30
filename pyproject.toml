@@ -1,0 +1,132 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "universal-ai"
+version = "1.0.0"
+description = "The Requests library for AI — one unified SDK for every LLM provider"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "UniversalAI Contributors", email = "hello@universal-ai.dev"},
+]
+keywords = [
+    "ai", "llm", "openai", "anthropic", "gemini", "ollama", "groq",
+    "mistral", "huggingface", "chatbot", "streaming", "embeddings",
+    "rag", "agents", "tools", "middleware", "unified-api",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+anthropic = ["anthropic>=0.30.0"]
+gemini = ["google-genai>=0.3.0"]
+ollama = ["ollama>=0.3.0"]
+groq = ["groq>=0.8.0"]
+mistral = ["mistralai>=0.4.0"]
+openrouter = ["openai>=1.0.0"]
+huggingface = ["huggingface-hub>=0.20.0"]
+azure = ["openai>=1.0.0"]
+bedrock = ["boto3>=1.28.0"]
+serve = ["aiohttp>=3.9.0"]
+rag = ["numpy>=1.24.0", "tiktoken>=0.5.0"]
+all = [
+    "universal-ai[openai,anthropic,gemini,ollama,groq,mistral,openrouter,huggingface,azure,serve,rag]",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "ruff>=0.4.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.0.0",
+]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings[python]>=0.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/6t9xstar/universal-ai"
+Documentation = "https://universal-ai.dev"
+Repository = "https://github.com/6t9xstar/universal-ai"
+Issues = "https://github.com/6t9xstar/universal-ai/issues"
+Changelog = "https://github.com/6t9xstar/universal-ai/blob/main/CHANGELOG.md"
+Discord = "https://discord.gg/universal-ai"
+
+[project.scripts]
+uai = "universal_ai_cli.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["universal_ai", "universal_ai_cli"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks integration tests",
+    "unit: marks unit tests",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W", "I", "N", "UP", "YTT", "ANN", "S", "BLE",
+    "FBT", "B", "A", "COM", "C4", "DTZ", "T10", "EM", "FA",
+    "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q",
+    "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "ARG",
+    "PTH", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "PERF",
+    "FURB", "LOG", "RUF",
+]
+ignore = [
+    "ANN101", "ANN102", "ANN401", "S101", "T201", "COM812",
+    "ISC001", "E501", "TRY003", "PLR0913", "PLR2004",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "ANN", "PLR2004", "T201"]
+"examples/**/*.py" = ["T201", "ANN", "INP001"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["universal_ai"]
+omit = ["tests/*", "examples/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80
